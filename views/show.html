@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>{{.Email}}</div>
+<div><table style="border:1px solid #0094ff;">
+       <tr>
+           <th>房间ID</th>
+           <th>发布者</th>
+           <th>房间名</th>
+           <th>房间类型</th>
+           <th>房间价格</th>
+           <th>房间简要信息</th>
+           <!--<th>房间详细信息</th>-->
+           <th>房间照片</th>
+           <th>房间归属市</th>
+           <th>房间归属区</th>
+           <!--<th>房间地址详细描述</th>-->
+           <th>创建时间</th>
+           <th>更新时间</th>
+           <th>回复次数</th>
+           <th>回答人数</th>
+           <th>评论人数</th>
+           <th>是否精华</th>
+           <th>是否推荐</th>
+           <th>是否结贴</th>
+           <th>经度</th>
+           <th>纬度</th>
+           <th>审核</th>
+
+
+       </tr>
+
+         {{range $val := .Datas}}
+    <tr>
+         <td>{{$val.Room_id}}</td>
+        <td>{{$val.User_id}}</td>
+        <td>{{$val.Room_name}}</td>
+        <!--<td>{{$val.Room_type}}</td>-->
+        <td>{{if  eq $val.Room_type 0}}整租
+            {{else}}合租
+            {{end}}</td>
+        <td>{{$val.Room_price}}</td>
+        <td>{{$val.Room_content}}</td>
+        <!--<td>{{$val.Room_detail}}</td>-->
+        <td>{{$val.Room_images}}</td>
+        <td>{{$val.Room_city}}</td>
+        <td>{{$val.Room_area}}</td>
+        <!--<td>{{$val.Room_address}}</td>-->
+        <td>{{$val.Add_time}}</td>
+        <td>{{$val.Update_time}}</td>
+        <td>{{$val.Answer_users}}</td>
+        <td>{{$val.Focus_count}}</td>
+        <td>{{$val.Comment_count}}</td>
+        <td>{{$val.Is_essence}}</td>
+        <td>{{$val.Is_comment}}</td>
+        <td>{{$val.Is_over}}</td>
+        <td>{{$val.Point_lng}}</td>
+        <td>{{$val.Point_lat}}</td>
+        <td>{{$val.Is_check}}</td>
+
+
+
+    </tr>
+         {{end}}
+
+     </table>
+</div>
+</body>
+<style>
+    table,table tr th, table tr td { border:1px solid #0094ff; }
+    table { width: 200px; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;}
+</style>
+</html>
