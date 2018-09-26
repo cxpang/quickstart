@@ -1,0 +1,419 @@
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <title>首页</title>
+</head>
+<body>
+<div style="display: none;"></div>
+
+<div class="htmleaf-container">
+    <nav class="animenu">
+        <button class="animenu__toggle">
+            <span class="animenu__toggle__bar"></span>
+            <span class="animenu__toggle__bar"></span>
+            <span class="animenu__toggle__bar"></span>
+        </button>
+        <ul class="animenu__nav ">
+            <li class="juzhong">
+                <a href="/" class="xiugai" >校园合租</a>
+            </li>
+            <li class="juzhong">
+                <a href="#" class="xiugai">地址</a>
+                <ul class="animenu__nav__child">
+                    <li><a href="#">全部</a></li>
+                    <li><a href="#">上海</a></li>
+                    <li><a href="#">北京</a></li>
+
+                </ul>
+            </li>
+            <li class="juzhong">
+                <a href="#" class="xiugai">论坛</a>
+                <ul class="animenu__nav__child">
+                    <li><a href="#">租友论坛</a></li>
+                </ul>
+            </li>
+            <li class="juzhong">
+                <a href="#" class="xiugai">发现</a>
+                <ul class="animenu__nav__child">
+
+                    <li><a href="#">精品房源</a></li>
+                    <li><a href="#">租房故事</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div><div>
+    <table style="border:1px solid #0094ff;">
+        <tr>
+            <th>房间ID</th>
+            <th>发布者</th>
+            <th>房间名</th>
+            <th>房间类型</th>
+            <th>房间价格</th>
+            <th>房间简要信息</th>
+            <!--<th>房间详细信息</th>-->
+            <th>房间照片</th>
+            <th>房间归属市</th>
+            <th>房间归属区</th>
+            <!--<th>房间地址详细描述</th>-->
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>回复次数</th>
+            <th>回答人数</th>
+            <th>评论人数</th>
+            <th>是否精华</th>
+            <th>是否推荐</th>
+            <th>是否结贴</th>
+            <th>经度</th>
+            <th>纬度</th>
+            <th>审核</th>
+
+
+        </tr>
+
+        {{range $val := .Datas}}
+        <tr>
+            <td>{{$val.Room_id}}</td>
+            <td>{{$val.User_id}}</td>
+            <td>{{$val.Room_name}}</td>
+            <!--<td>{{$val.Room_type}}</td>-->
+            <td>{{if  eq $val.Room_type 0}}整租
+                {{else}}合租1
+                {{end}}</td>
+            <td>{{$val.Room_price}}</td>
+            <td>{{$val.Room_content}}</td>
+            <!--<td>{{$val.Room_detail}}</td>-->
+            <td>{{$val.Room_images}}</td>
+            <td>{{$val.Room_city}}</td>
+            <td>{{$val.Room_area}}</td>
+            <!--<td>{{$val.Room_address}}</td>-->
+            <td>{{$val.Add_time}}</td>
+            <td>{{$val.Update_time}}</td>
+            <td>{{$val.Answer_users}}</td>
+            <td>{{$val.Focus_count}}</td>
+            <td>{{$val.Comment_count}}</td>
+            <td>{{$val.Is_essence}}</td>
+            <td>{{$val.Is_comment}}</td>
+            <td>{{$val.Is_over}}</td>
+            <td>{{$val.Point_lng}}</td>
+            <td>{{$val.Point_lat}}</td>
+            <td>{{$val.Is_check}}</td>
+
+
+
+        </tr>
+        {{end}}
+
+    </table>
+</div>
+    <style>
+        table,table tr th, table tr td { border:1px solid #0094ff; }
+        table { width: 200px; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;}
+    </style></div>
+<script type="text/javascript">
+    (function(){
+        var animenuToggle = document.querySelector('.animenu__toggle'),
+            animenuNav    = document.querySelector('.animenu__nav'),
+            hasClass = function( elem, className ) {
+                return new RegExp( ' ' + className + ' ' ).test( ' ' + elem.className + ' ' );
+            },
+            toggleClass = function( elem, className ) {
+                var newClass = ' ' + elem.className.replace( /[\t\r\n]/g, ' ' ) + ' ';
+                if( hasClass(elem, className ) ) {
+                    while( newClass.indexOf( ' ' + className + ' ' ) >= 0 ) {
+                        newClass = newClass.replace( ' ' + className + ' ' , ' ' );
+                    }
+                    elem.className = newClass.replace( /^\s+|\s+$/g, '' );
+                } else {
+                    elem.className += ' ' + className;
+                }
+            },
+            animenuToggleNav =  function (){
+                toggleClass(animenuToggle, "animenu__toggle--active");
+                toggleClass(animenuNav, "animenu__nav--open");
+            }
+
+        if (!animenuToggle.addEventListener) {
+            animenuToggle.attachEvent("onclick", animenuToggleNav);
+        }
+        else {
+            animenuToggle.addEventListener('click', animenuToggleNav);
+        }
+    })()
+</script>
+
+</body>
+</html>
+<style type="text/css">
+    .juzhong{
+        text-align: center;
+    }
+    .buttonlogout{
+        font-size: 20px;
+        cursor: pointer;
+        width: 170px;
+        height: 50px;
+        border: none;
+        color: #ffffff;
+        background-color: rgba(0,0,0,0.0);
+    }
+    .footer{
+        height:20%;
+        background:#111;
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+    .footerintro{
+        display: inline-block;
+        margin: 0 auto;
+        margin-top: 20px;
+        color: #ffffff;
+        font-family: "Microsoft YaHei";
+        font-size: 20px;
+    }
+    .footer2{
+        display: inline-block;
+        margin: 0 auto;
+        margin-top: 20px;
+        color: #ffffff;
+        font-family: "Microsoft YaHei";
+        font-size: 20px;
+    }
+    .showuser{
+        display: inline-block;
+        margin-top: 20px;
+        color: #ffffff;
+        font-family: "Microsoft YaHei";
+        font-size: 20px;
+    }
+    .xiugai{
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-family: "Microsoft YaHei";
+    }
+    body{
+        margin:0;
+        padding:0;
+        height: 100%;
+        background: rgb(0,0,0,,0.5);
+    }
+    *, *:after, *:before {
+        box-sizing: border-box;
+    }
+
+    .animenu__toggle {
+        display: none;
+        cursor: pointer;
+        background-color: #111;
+        border: 0;
+        padding: 10px;
+        height: 40px;
+        width: 40px;
+    }
+    .animenu__toggle:hover {
+        background-color: #0186ba;
+    }
+
+    .animenu__toggle__bar {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: #fff;
+        -webkit-transition:  0.15s cubic-bezier(0.75, -0.55, 0.25, 1.55);
+        -o-transition:  0.15s cubic-bezier(0.75, -0.55, 0.25, 1.55);
+        transition:  0.15s cubic-bezier(0.75, -0.55, 0.25, 1.55);
+    }
+    .animenu__toggle__bar + .animenu__toggle__bar {
+        margin-top: 4px;
+    }
+
+    .animenu__toggle--active .animenu__toggle__bar {
+        margin: 0;
+        position: absolute;
+    }
+    .animenu__toggle--active .animenu__toggle__bar:nth-child(1) {
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    .animenu__toggle--active .animenu__toggle__bar:nth-child(2) {
+        opacity: 0;
+    }
+    .animenu__toggle--active .animenu__toggle__bar:nth-child(3) {
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+
+    .animenu {
+        display: block;
+    }
+    .animenu ul {
+        padding: 0;
+        list-style: none;
+        font: 0px 'Open Sans', Arial, Helvetica;
+    }
+    .animenu li, .animenu a {
+        display: inline-block;
+        font-size: 25px;
+    }
+    .animenu a {
+        color: #aaaaaa;
+        text-decoration: none;
+    }
+
+    .animenu__nav {
+        background-color: #111;
+    }
+    .animenu__nav > li {
+        position: relative;
+    }
+    .animenu__nav > li > a {
+        padding: 10px 30px;
+        text-transform: uppercase;
+    }
+    .animenu__nav > li > a:first-child:nth-last-child(2):before {
+        content: "";
+        position: absolute;
+        border: 4px solid transparent;
+        border-bottom: 0;
+        border-top-color: currentColor;
+        top: 50%;
+        margin-top: -2px;
+        right: 10px;
+    }
+    .animenu__nav > li:hover > ul {
+        opacity: 1;
+        visibility: visible;
+        margin: 0;
+    }
+    .animenu__nav > li:hover > a {
+        color: #fff;
+    }
+
+    .animenu__nav__child {
+        min-width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        opacity: 0;
+        visibility: hidden;
+        margin: 20px 0 0 0;
+        background-color: #373737;
+        transition: margin .15s, opacity .15s;
+    }
+    .animenu__nav__child > li {
+        width: 100%;
+    }
+    .animenu__nav__child > li:first-child > a:after {
+        content: '';
+        position: absolute;
+        height: 0;
+        width: 0;
+        left: 1em;
+        top: -6px;
+        border: 6px solid transparent;
+        border-top: 0;
+        border-bottom-color: inherit;
+    }
+    .animenu__nav__child > li:last-child {
+        border: 0;
+    }
+    .animenu__nav__child a {
+        padding: 10px;
+        width: 100%;
+        border-color: #373737;
+    }
+    .animenu__nav__child a:hover {
+        background-color: #0186ba;
+        border-color: #0186ba;
+        color: #fff;
+    }
+
+    @media screen and (max-width: 767px) {
+        .animenu__toggle {
+            display: inline-block;
+        }
+
+        .animenu__nav,
+        .animenu__nav__child {
+            display: none;
+        }
+
+        .animenu__nav {
+            margin: 10px 0;
+        }
+        .animenu__nav > li {
+            width: 100%;
+            border-right: 0;
+            border-bottom: 1px solid #515151;
+        }
+        .animenu__nav > li:last-child {
+            border: 0;
+        }
+        .animenu__nav > li:first-child > a:after {
+            content: '';
+            position: absolute;
+            height: 0;
+            width: 0;
+            left: 1em;
+            top: -6px;
+            border: 6px solid transparent;
+            border-top: 0;
+            border-bottom-color: inherit;
+        }
+        .animenu__nav > li > a {
+            width: 100%;
+            padding: 10px;
+            border-color: #111;
+            position: relative;
+        }
+        .animenu__nav a:hover {
+            background-color: #0186ba;
+            border-color: #0186ba;
+            color: #fff;
+        }
+
+        .animenu__nav__child {
+            position: static;
+            background-color: #373737;
+            margin: 0;
+            transition: none;
+            visibility: visible;
+            opacity: 1;
+        }
+        .animenu__nav__child > li:first-child > a:after {
+            content: none;
+        }
+        .animenu__nav__child a {
+            padding-left: 20px;
+            width: 100%;
+        }
+    }
+    .animenu__nav--open {
+        display: block !important;
+    }
+    .animenu__nav--open .animenu__nav__child {
+        display: block;
+    }
+
+</style>
