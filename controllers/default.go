@@ -18,6 +18,7 @@ func (c *MainController) Get() {
 	//c.TplName = "index.tpl"
 	orm.Debug = true
 	ss := models.GetAllRooms()
+	c.Layout = "layout/layout.html"
 	c.Data["Datas"]=ss
-	c.TplName = "header.html"
+	c.TplName = "show.html"
 }
