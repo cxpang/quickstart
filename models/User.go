@@ -13,11 +13,11 @@ func init() {
 	// 需要在init中注册定义的model
 	orm.RegisterModel(new(User))
 }
-func CheckUserLogin(username,email string) ([]*User,bool)  {
+func CheckUserLogin(username,email string) (User,bool)  {
 
 	o:=orm.NewOrm()
 	o.Using("default")
-	var user []*User
+	var user User
 	err :=o.QueryTable("user").Filter("username",username).Filter("email",email).One(&user)
 	if err !=nil{
 		return user,false

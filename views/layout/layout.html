@@ -43,10 +43,17 @@
                 </ul>
             </li>
             <li class="juzhong">
-                <a href="#" class="xiugai">用户行为</a>
+                {{if eq .IsLogin 1}}
+                <a href="#" class="xiugai">{{.User_name}}</a>
                 <ul class="animenu__nav__child">
                     <li><a href="login">登录</a></li>
                 </ul>
+                {{else}}
+                <a href="#" class="xiugai">{{.User_name}}</a>
+                <ul class="animenu__nav__child">
+                    <li><a href="#">退出</a></li>
+                </ul>
+                {{end}}
             </li>
         </ul>
     </nav>
