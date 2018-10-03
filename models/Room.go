@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 )
-
 //数据room字段映射
 type Room struct {
 	Room_id int  `orm:"pk;column(room_id);"`
