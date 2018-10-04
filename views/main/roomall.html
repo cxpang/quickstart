@@ -1,0 +1,83 @@
+<div class="container" style="margin-bottom: 200px;margin-top: 50px">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">首页</a>
+                </li>
+                <li class="active">
+                    全部房间
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-12" style="border: 1px solid #e4e6eb;margin-top: 20px">
+
+        {{range $val := .Datas}}
+        <a href="#">
+
+            <div class="col-md-4 columnroom">
+                <div class="col-lg-12">
+                    <img class="images" src="http://cxpang.com/roomshare/uploads/{{SubstrForTemplate $val.Room_images}}">
+                </div>
+                <div class="itemcontents">
+                    <div>
+                        <strong><span style="font-size: 20px;color: red"><img src="static/img/yuan.jpg">{{$val.Room_price}}</span></strong>
+
+                        {{if  eq $val.Is_essence 1}}
+                        <span class="glyphicon glyphicon-queen" style="color:green ">精品</span>
+                        {{end}}
+                        {{if  eq $val.Is_comment 1}}
+                        <span class="glyphicon glyphicon-thumbs-up" style="color:green ">推荐</span>
+                        {{end}}
+                        <span style="float: right"><span class="glyphicon glyphicon-star" style="color:green "></span>评价{{$val.Comment_count}}</span>
+                    </div>
+                    <div>
+                        <span class="glyphicon glyphicon-home"></span>:{{$val.Room_name}}<br />
+                        <span class="glyphicon glyphicon-tags"></span>:<span style="font-size: 9px">{{$val.Room_content}}</span>
+                        <br />
+                        <span class="glyphicon glyphicon-map-marker"></span>{{$val.City}}·{{$val.Area}}
+                        <span style="float: right">
+                                <img style="border-radius: 50%;width: 50px;height: 50px;margin-top: -35px;" src="http://cxpang.com{{.User_picture}}">
+                            </span>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </a>
+
+
+
+        {{end}}
+
+    </div>
+
+</div>
+<style>
+    .columnroom{
+        background-color: #ffffff;
+        border-bottom: 1px solid #e4e6eb ;
+        border-right: 2px solid #e4e6eb;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    .images{
+        max-width: 100%;
+        max-height: 100%;
+        border-radius:5%;
+    }
+    .itemcontents{
+        margin-top: 15px;
+    }
+    a:link,a:visited{color:#444;text-decoration:none;}
+    a:hover{color:#ff0000;}
+    .span-content{
+        font-size: 15px;
+        font-family: "Microsoft YaHei";
+
+    }
+</style>
+
