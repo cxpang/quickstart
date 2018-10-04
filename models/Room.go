@@ -37,7 +37,7 @@ func GetAllRooms() []*Room {
 	o:=orm.NewOrm()
 	o.Using("default")
 	var rooms []*Room
-	q:= o.QueryTable("room")
+	q:= o.QueryTable("room").Filter("is_check",1)
 	q.All(&rooms)
 	return rooms
 }

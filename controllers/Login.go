@@ -3,7 +3,7 @@ import (
 	"github.com/astaxie/beego"
 
 	"quickstart/models"
-   //"fmt"
+    //"fmt"
 )
 type LoginController struct {
 	beego.Controller
@@ -20,5 +20,7 @@ func (this *LoginController) Post(){
 		this.Redirect("/login",302)
 	}
 	this.SetSession("user_name",datas.Username)
+	this.SetSession("user_picture",datas.User_picture)
+	//fmt.Println(this.CruSession)
 	this.Redirect("/",302)
 }
