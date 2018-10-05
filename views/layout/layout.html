@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>首页</title>
+
 </head>
 <body>
 <div style="display: none;"></div>
@@ -46,7 +46,7 @@
                 {{if eq .IsLogin 1}}
                 <a href="#" class="xiugai"><img style="width: 50px;height: 50px;border-radius: 50%" src="http://cxpang.com{{.User_picture}}">{{.User_name}}</a>
                 <ul class="animenu__nav__child">
-                    <li><a href="login">登录</a></li>
+                    <li><a href="/login">登录</a></li>
                 </ul>
                 {{else}}
                 <a href="#"><img style="width: 50px;height: 50px;border-radius: 50%" src="http://cxpang.com{{.User_picture}}">{{.User_name}}</a>
