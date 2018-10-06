@@ -20,7 +20,7 @@ func main() {
 func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 
-	orm.RegisterDataBase("default", "mysql", "root:200517@tcp(120.24.97.50:9090)/roomshare?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", "root:200517@tcp(116.62.232.139:9090)/roomshare?charset=utf8")
 }
 
 

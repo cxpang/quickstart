@@ -20,6 +20,12 @@ func (this *RoomdetailController) Get(){
 	this.Data["image0"] = image_array[0]
 	this.Data["image1"] = image_array[1]
 	this.Data["image2"] = image_array[2]
+
+	//获取房间的评论信息
+
+	this.Data["comments"]=models.GetRoomComment(room_id)
+
+
 	this.Layout = "layout/layout.html"
 	this.TplName = "main/roomdetail.html"
 }

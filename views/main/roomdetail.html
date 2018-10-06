@@ -55,98 +55,60 @@
                 <div class="tab-content">
 
 
-                    <!--&lt;!&ndash;                    评论信息&ndash;&gt;-->
-                    <!--<div class="tab-pane active" id="panel-304156" >-->
-                    <!--<?php foreach ($data['comment'] as $row){?>-->
-                    <!--<div class="col-md-12" style="margin-top: 20px;border-top: solid 1px #ccc;">-->
+                    <!--                    评论信息-->
 
-                    <!--<div class="col-md-1" style="margin-top: 10px">-->
-                    <!--<img class="comment-image img-circle"   src="<?=UserInfo::GetUserImage($row['user_id'])?>">-->
-                    <!--</div>-->
-                    <!--<div class="col-md-11" style="margin-top: 15px">-->
-                    <!--<div style="font-size: 20px;color:#2d64b3"><?=User::GetUserName($row['user_id'])?></div>-->
-                    <!--<div style="float: right;font-size: 20px;margin-top: -30px;">-->
-                    <!--<button data-loading-text="*****" id="btn<?=$row['comments_id']?>" style="color: #2d64b3" class="btn btn-default" onclick="showcommentres(<?=$row['comments_id']?>)"><span class="glyphicon glyphicon-comment"></span>&nbsp;<?=$row['answer_count']?></button>-->
-                    <!--<br />-->
-                    <!--<button style="color: #2d64b3;width: 53px;margin-top: 5px;" onclick="addcomres(<?=$row['user_id']?>,'<?=User::GetUserName($row["user_id"])?>',<?=$row['comments_id']?>)" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></button>-->
+                    <div class="tab-pane active" id="panel-304156" >
+                        {{range $val:=.comments}}
+                        <div class="col-md-12" style="margin-top: 20px;border-top: solid 1px #ccc;">
 
-                    <!--</div>-->
-                    <!--<div><?=date('Y-m-d H:i:s',$row['created_at'])?></div>-->
+                            <div class="col-md-1" style="margin-top: 10px">
+                                <img class="comment-image img-circle"   src="http://cxpang.com{{$val.User_picture}}">
+                            </div>
+                            <div class="col-md-11" style="margin-top: 15px">
+                                <div style="font-size: 20px;color:#2d64b3">{{$val.Username}}</div>
+                                <div style="float: right;font-size: 20px;margin-top: -30px;">
+                                    <button data-loading-text="*****" id="btn{{$val.Comments_id}}" style="color: #2d64b3" class="btn btn-default" onclick="showcommentres({{$val.Comments_id}})"><span class="glyphicon glyphicon-comment"></span>&nbsp;{{$val.Answer_count}}</button>
+                                    <br />
+                                    <button style="color: #2d64b3;width: 53px;margin-top: 5px;" onclick="addcomres({{$val.User_id}},'{{$val.Username}}',{{$val.Comments_id}})" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></button>
 
-                    <!--</div>-->
-                    <!--<div class="col-md-12" id="<?=$row['comments_id']?>" style="margin-top: 30px;color: #484848;font-size: 18px;margin-bottom: 10px">-->
-                    <!--<?=$row['comments_content']?>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-12" id="res-form<?=$row['comments_id']?>" style="display: none">-->
-                    <!--<?php $form = ActiveForm::begin(['method' => "post",'action'=>Url::to(['room/addcommres']),'options' => ['style' => 'margin-top: 10px;margin-bottom:10px;'] ]); ?>-->
+                                </div>
+                                <div>{{$val.Created_at}}</div>
 
-                    <!--<div class="col-md-12 form-group" style="margin-top: 50px;border: solid 1px #ccc;">-->
-                    <!--<input type="text" name="roomid" class="form-control" value="<?=$data['room_id']?>" style="display: none">-->
+                            </div>
+                            <div class="col-md-12" id="{{$val.Comments_id}}" style="margin-top: 30px;color: #484848;font-size: 18px;margin-bottom: 10px">
+                                {{$val.Comments_content}}
+                            </div>
+                        </div>
+                            {{end}}
+                    </div>
 
-                    <!--<input type="text" id="res_at_user_id<?=$row['comments_id']?>" style="display: none;" name="at_user_id" class="form-control">-->
-                    <!--<input type="text" id="res_comments_id<?=$row['comments_id']?>" style="display: none;" name="comments_id" class="form-control">-->
-                    <!--<div class="col-md-3" style="margin-top: 23px;font-size: 18px;" id="res_comments_con<?=$row['comments_id']?>"></div>-->
-                    <!--<div class="col-md-9"  style="margin-top: 20px;">-->
-                    <!--<input type="text"  name="res_comments_con" class="form-control">-->
-                    <!--</div>-->
-                    <!--<div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">-->
-                    <!--<input type="submit" class="btn btn-primary ">-->
-                    <!--</div>-->
-                    <!--<div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">-->
-                    <!--<input type="button" onclick="closediv(<?=$row['comments_id']?>);" value="关闭" class="btn btn-danger">-->
-                    <!--</div>-->
+                    <div class="tab-pane" id="panel-594129">
+                    {{if eq .IsLogin 1}}
+                    <div class="col-md-5" style="margin-top: 50px">
+                    <span class="alert alert-info">您还没有登陆,请点击右侧登陆按钮</span>
+                    </div>
+                    <div class="col-md-3"style="margin-top: 45px">
+                    <span><a class="btn btn-primary" href="/login">登陆</a></span>
 
-                    <!--</div>-->
-                    <!--<?php $form = ActiveForm::end();  ?>-->
-                    <!--</div>-->
+                    </div>
+                    {{else}}
+                    <div class="col-md-12 form-group" style="margin-top: 50px;border: solid 1px #ccc;">
+                    <input type="text" name="roomid" class="form-control" value="{{.roomdetail.Room_id}}" style="display: none">
+                    <div class="col-md-2" style="font-size: 18px;margin-top: 24px;">评论内容:</div>
+                    <div class="col-md-10" style="margin-top: 20px;">
+                    <input type="text" name="roomcontent" class="form-control">
+                    </div>
+                    <div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">
+                    <input type="submit" class="btn btn-primary ">
+                    </div>
+                    <div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">
+                    <input type="reset" class="btn btn-danger">
+                    </div>
 
-                    <!--</div>-->
-                    <!--<?php }?>-->
+                    </div>
+                        {{end}}
 
-
-
-                    <!--</div>-->
-                    <!--&lt;!&ndash;                    添加评论&ndash;&gt;-->
-                    <!--<div class="tab-pane" id="panel-594129">-->
-                    <!--<?php-->
-                    <!--if(Yii::$app->user->isGuest) {-->
-                    <!--?>-->
-                    <!--<div class="col-md-5" style="margin-top: 50px">-->
-                    <!--<span class="alert alert-info">您还没有登陆,请点击右侧登陆按钮</span>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-3"style="margin-top: 45px">-->
-                    <!--<span><a class="btn btn-primary" href="<?=Url::to(['site/login'])?>">登陆</a></span>-->
-
-                    <!--</div>-->
-                    <!--<?php-->
-                    <!--}-->
-                    <!--?>-->
-                    <!--<?php if(!Yii::$app->user->isGuest){?>-->
-                    <!--<?php-->
-                    <!--foreach (Yii::$app->session->getAllFlashes() as $key=>$message){-->
-                    <!--echo '<div style="margin-top:50px" class="alert alert-' . $key . '">' . $message . "</div>\n";-->
-                    <!--}-->
-                    <!--?>-->
-                    <!--<?php $form = ActiveForm::begin(['method' => "post",'action'=>Url::to(['room/addcomment']),'options' => ['style' => 'margin-top: 10px;margin-bottom:10px;'] ]); ?>-->
-
-                    <!--<div class="col-md-12 form-group" style="margin-top: 50px;border: solid 1px #ccc;">-->
-                    <!--<input type="text" name="roomid" class="form-control" value="<?=$data['room_id']?>" style="display: none">-->
-                    <!--<div class="col-md-2" style="font-size: 18px;margin-top: 24px;">评论内容:</div>-->
-                    <!--<div class="col-md-10" style="margin-top: 20px;">-->
-                    <!--<input type="text" name="roomcontent" class="form-control">-->
-                    <!--</div>-->
-                    <!--<div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">-->
-                    <!--<input type="submit" class="btn btn-primary ">-->
-                    <!--</div>-->
-                    <!--<div class="col-md-2" style="margin-top: 20px;margin-bottom: 20px;">-->
-                    <!--<input type="reset" class="btn btn-danger">-->
-                    <!--</div>-->
-
-                    <!--</div>-->
-                    <!--<?php $form = ActiveForm::end(); } ?>-->
-
-
-                    <!--</div>-->
+                    </div>
                 </div>
             </div>
         </div>
@@ -336,7 +298,7 @@
         formdata.append('comments_id',comments_id);
         $.ajax(
             {
-                url:"<?=Url::to(['room/commentres'])?>",
+                url:"/showcomments",
                 type:'POST',
                 cache:false,
                 data:formdata,
@@ -347,16 +309,17 @@
                     if(data){
                         var jsondata=eval(data);
                         $.each(jsondata,function (index,objval){
-                            var at_user_id=objval['user_id'];
-                            var at_username=objval['username'];
+                            var At_user_id=objval['User_id'];
+                            var At_username=objval['Username'];
+                            var Comments_id=objval['Comments_id'];
                             var div="<div style='margin-top:20px;margin-left: 20px;font-size: 16px; '>";
-                            div+="<img style='height: 40px;width: 40px;border-radius: 50%' src='"+objval['user_picture']+"'/>";
-                            div+="<span style='color: #2d64b3'>"+objval['username'];
+                            div+="<img style='height: 40px;width: 40px;border-radius: 50%' src='http://cxpang.com"+objval['User_picture']+"'/>";
+                            div+="<span style='color: #2d64b3'>"+objval['Username'];
                             div+="</span>";
-                            div+="<span>"+":回复"+objval['at_username']+":"+objval['message'];
+                            div+="<span>"+":回复"+objval['At_username']+":"+objval['Message'];
                             div+="</span>";
-                            div+="<a onclick=addcomres"+"("+at_user_id+",'"+at_username+"',"+comments_id+")"+"; >"+"<span  style='margin-left: 20px;cursor:pointer ;' class='glyphicon glyphicon-edit'>"+"</span>"+"</a>";
-                            div+="<span style='float: right;margin-top: 7px;'>"+formatetime(objval['created_at'])+"</span>";
+                            div+="<a onclick=addcomres"+"("+At_user_id+",'"+At_username+"',"+Comments_id+")"+"; >"+"<span  style='margin-left: 20px;cursor:pointer ;' class='glyphicon glyphicon-edit'>"+"</span>"+"</a>";
+                            div+="<span style='float: right;margin-top: 7px;'>"+formatetime(objval['Created_at'])+"</span>";
                             div+="</div>";
                             $("#"+comments_id).append(div);
                             $("#btn"+comments_id).button('loading').delay(1000).queue(function() {
