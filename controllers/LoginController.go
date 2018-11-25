@@ -21,6 +21,7 @@ func (this *LoginController) Post(){
 	}
 	this.SetSession("user_name",datas.Username)
 	this.SetSession("user_picture",datas.User_picture)
+	this.SetSession("user_id",datas.Id)
 	//fmt.Println(this.CruSession)
 	this.Redirect("/",302)
 }

@@ -10,6 +10,11 @@ type User struct {
 	Email string
 	User_picture string
 }
+type ChatUser struct {
+	Id int  `orm:"pk;column(id);"`
+	Username string
+	User_picture string
+}
 
 func init() {
 	// 需要在init中注册定义的model
@@ -27,4 +32,29 @@ func CheckUserLogin(username,email string) (User,bool)  {
 	}
 	return user,true
 }
+func GetChatUserInfo(UserId int) (ChatUser,bool){
+	o:=orm.NewOrm()
+	o.Using("default")
+	var user ChatUser
+	//err :=o.QueryTable("user").Filter("username",username).Filter("email",email).One(&user)
+	err :=o.Raw("select a.id,a.username,b.user_picture from user as a left join user_info as b on a.id=b.user_id where a.id= ? ",UserId).QueryRow(&user)
+	if err !=nil{
+		return user,false
+	}
+	return user,true
+}
+
+//根据传入的UserId返回userName
+func GetUserNameByUserId(UserId int)(ChatUser,bool){
+	o:=orm.NewOrm()
+	o.Using("default")
+	var user ChatUser
+	//err :=o.QueryTable("user").Filter("username",username).Filter("email",email).One(&user)
+	err :=o.Raw("select a.id,a.username,b.user_picture from user as a left join user_info as b on a.id=b.user_id where a.id= ? ",UserId).QueryRow(&user)
+	if err !=nil{
+		return user,false
+	}
+	return user,true
+}
+
 

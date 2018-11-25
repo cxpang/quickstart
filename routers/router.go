@@ -11,4 +11,6 @@ func init() {
 	beego.Router("/roomall", &controllers.MainController{})
 	beego.Router("/roomdetail/:roomid:int", &controllers.RoomdetailController{})
     beego.Router("/showcomments",&controllers.ShowcommentsController{})
+    beego.Router("/chat/:touser:int",&controllers.ChatController{})
+    beego.Router("/chatcenter",&controllers.ChatCenterController{})
 }
