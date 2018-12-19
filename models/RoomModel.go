@@ -44,7 +44,7 @@ type RoomDetail struct {
 	Room_city int
 	Room_area int
 	Room_address string
-	Add_time string
+	Add_time int64
 	Update_time string
 	Answer_users int
 	Focus_count int

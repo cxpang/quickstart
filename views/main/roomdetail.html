@@ -135,7 +135,7 @@
                 </li>
                 <li><b></b>详细信息:{{.roomdetail.Room_detail}}</li>
                 <strong><li><b></b>所属地区:{{.roomdetail.City}}|{{.roomdetail.Area}}</li></strong>
-                <strong> <li><b></b>发布时间:{{.roomdetail.Add_time}}</li></strong>
+                <strong> <li><b></b>发布时间:{{FormateTimeFromInt64 .roomdetail.Add_time}}</li></strong>
 
             </ul>
             <button type="button" onclick="shakeRent({{.roomdetail.Room_id}},{{.roomdetail.User_id}});" class="btn btn-block btn-lg btn-warning">有意合租</button>
