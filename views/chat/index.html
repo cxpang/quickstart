@@ -75,102 +75,34 @@
     .linear-g{background: -moz-linear-gradient(top, #fdfdfd, #f6f6f6);background: -webkit-gradient(linear,top,from(#fdfdfd),to(#f6f6f6));background: -webkit-linear-gradient(top, #fdfdfd, #f6f6f6);background: -o-linear-gradient(top, #fdfdfd, #f6f6f6);box-shadow:0 0 5px #ccc;}
 </style>
 <script>
-    var socket = null; //初始为null
-    var touser=null;
-    var isLogin = false; //是否登录到服务器上
-
-    window.onload = function(){
-        var userid="{{.CurrentId}}";
-        socket = new WebSocket("ws://120.24.97.50:8484");
-        socket.onopen = function() {
-            socket.send('login:' + userid);
+    var socket;
+    var userid="{{.CurrentId}}";
+    var touserid = "{{.toUser.Id}}";
+    window.onload =function () {
+        socket = new WebSocket('ws://' + window.location.host + '/ws/join?UserId=' + userid + '&ToUserId='+touserid);
+        socket.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            switch (data.Status){
+                case 3:
+                    alert("私聊对象暂时不在线");
+                    break;
+            }
         };
-        socket.onmessage=function (e) {
-            var getMsg = e.data;
-            if(/^notice:success$/.test(getMsg)) { //服务器验证通过
-                isLogin = true;
-            }
-            else if(/^msg:/.test(getMsg)) { //代表是普通消息
-                console.log(getMsg);
-                var now=gettime();
-                var i="<li class='even'> <a class='user' href='#'>";
-                i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.toUser.User_picture}}' alt=''>";
-                i+="<span class='user-name'><?=$to_user['username']?></span></a>";
-                i+="<div class='reply-content-box'>";
-                i+=" <span class='reply-time'>"+now+"</span>";
-                i+="<div class='reply-content pr'>";
-                i+="<span class='arrow'>&nbsp;</span>";
-                i+=getMsg.replace('msg:','');
-                i+="</div></div></li>";
-
-
-                $("#chat-content").append(i);
-            }
-            else if(/^users:/.test(getMsg)){ //显示当前已登录用户
-                console.log(getMsg);
-
-
-                getMsg = getMsg.replace('users:','');
-                getMsg= eval('('+getMsg+')'); //转json
-                findkey(getMsg);
-
-
-            }
-
-        }
-        socket.onclose = function(){
-            isLogin = false;
-        }
-    }
-
-
-
-
-
-
-
-    function findkey(obj) {
-        $.each(obj, function(key, val) {
-            if(val=="{{.toUser.Id}}"){
-                touser= key;
-            }
-        });
-    }
-
-
+        
+        
+    };
     function sendmessage() {
         message=$("#input-message").val();
         if($.trim(message).length==0){
             alert("发送消息不能为空");
             $("#input-message").focus();
         }
-        else if(!touser){
-            //    保存离线消息到数据库中
-            var formdata=new FormData();
-            formdata.append('toid',{{.toUser.Id}});
-            formdata.append('message',message);
-            $.ajax(
-                    {
-                        url:'',
-                    type:'POST',
-                    cache:false,
-                    data:formdata,
-
-                    processData:false,
-                    contentType:false,
-                    success:function (data) {
-                alert("用户离线，我们将在用户上线时通知用户");
-                $("#input-message").val("");
-            }
-        }
-        )
-        }
-        else{
-            socket.send('chat:<'+touser+'>:'+message);
+        else {
+            socket.send(message);
             var now=gettime();
             var i="<li class='odd'> <a class='user' href='#'>";
-            i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.toUser.User_picture}}' alt=''>";
-            i+="<span class='user-name'>{{.toUser.Username}}</span></a>";
+            i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.User_picture}}' alt=''>";
+            i+="<span class='user-name'>{{.User_name}}</span></a>";
             i+="<div class='reply-content-box'>";
             i+=" <span class='reply-time'>"+now+"</span>";
             i+="<div class='reply-content pr'>";
@@ -183,7 +115,7 @@
             $("#input-message").focus();
         }
     }
-
+    //获取当前时间
     function gettime() {
         var myDate = new Date();
         var year=myDate.getFullYear();
@@ -196,6 +128,8 @@
         var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
         return now;
     }
+    
+
 
 
 </script>

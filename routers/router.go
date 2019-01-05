@@ -13,4 +13,5 @@ func init() {
     beego.Router("/showcomments",&controllers.ShowcommentsController{})
     beego.Router("/chat/:touser:int",&controllers.ChatController{})
     beego.Router("/chatcenter",&controllers.ChatCenterController{})
+    beego.Router("/ws/join",&controllers.WebsocketController{},"get:Join")
 }
