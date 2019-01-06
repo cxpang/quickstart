@@ -33,7 +33,7 @@
 
     <div id="chat-div{{$val.Fromid}}" class="col-md-12 yincang" style="border: 1px solid #ccc;overflow: auto;height: 550px">
                 <ul id="chat-content{{$val.Fromid}}" class="content-reply-box mg10">
-                    <li class="odd">
+                    <li class="even">
                         <a class="user" href="#"><img class="img-responsive avatar_" src="http://cxpang.com{{GetUserPicture $val.Fromid}}" alt=""><span class="user-name">{{GetUserName $val.Fromid}}</span></a>
                         <div class="reply-content-box">
                             <span class="reply-time">{{FormateTimeFromInt64 $val.UpdatedAt}}</span>
@@ -252,7 +252,7 @@
             $("#input-message").focus();
         }
         else {
-            // socket.send(message);
+            socket.send(message);
             var now=gettime();
             var i="<li class='odd'> <a class='user' href='#'>";
             i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.User_picture}}' alt=''>";
