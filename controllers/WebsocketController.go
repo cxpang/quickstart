@@ -7,6 +7,7 @@ import (
 
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 type WebsocketController struct {
@@ -22,7 +23,21 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-var users map[string]string
+
+//定义用户结构体
+type Usersocket struct {
+	UserId  string
+	ws  *websocket.Conn
+}
+//定义所有在线用户数组
+var users = make(map[string]Usersocket)
+
+type UserMessage struct {
+	Content string
+	Fromuser  string
+	Touser string
+}
+var publish = make(chan UserMessage, 10)
 
 
 func (this *WebsocketController) Join() {
@@ -32,29 +47,31 @@ func (this *WebsocketController) Join() {
 		this.Redirect("/", 302)
 		return
 	}
-	ws, err := websocket.Upgrade(this.Ctx.ResponseWriter, this.Ctx.Request, nil, 1024, 1024)
-	if _, ok := err.(websocket.HandshakeError); ok {
-		http.Error(this.Ctx.ResponseWriter, "Not a websocket handshake", 400)
-		return
-	} else if err != nil {
-		beego.Error("Cannot setup WebSocket connection:", err)
-		return
+	ws, err := upgrader.Upgrade(this.Ctx.ResponseWriter, this.Ctx.Request,nil)
+	if err != nil {
+		log.Fatal(err)
 	}
-	WebsocketJoin(userid)
-	CheckUserisLogin(touserid,ws)
-
-	//客户端离开事件
-	defer Leave(userid)
+	WebsocketJoin(ws,userid)
 
 
+
+    defer Leave(userid)
+    defer ws.Close()
 	//处理聊天消息
 
 	for {
 		_, p, err := ws.ReadMessage()
 		if err != nil {
+
 			return
 		}
-		fmt.Println(string(p))
+		//string(p)为接收到的消息
+		var usermess UserMessage
+		usermess.Fromuser = userid
+		usermess.Touser = touserid
+		usermess.Content = string(p)
+		publish <- usermess
+		go handlechat()
 	}
 
 
@@ -65,13 +82,39 @@ func (this *WebsocketController) Join() {
 
 //利用写协程发送消息
 
+func handlechat(){
+	chatmess:=<-publish
+	tousers := chatmess.Touser
+	fromuser :=chatmess.Fromuser
+	content:=chatmess.Content
+	fromuserWs :=users[fromuser].ws
+	onlineuser ,ok:= users[tousers]
+	if !ok {
+		var  mess Message
+		mess.Status=3
+		mess.Data = "该用户不存在"
+		response,_ := json.Marshal(mess)
+		fromuserWs.WriteMessage(1,response)
+	} else {
+		//用户在线处理发送
+		tousersws := onlineuser.ws
+		var mess Message
+		mess.Status = 1
+		mess.Data = content
+		response, _ := json.Marshal(mess)
+		tousersws.WriteMessage(1, response)
+	}
+}
 
-func  WebsocketJoin(userid string){
-	 users = make(map[string]string)
+
+
+func  WebsocketJoin(ws *websocket.Conn,userid string){
+
 	 _,ok:=users[userid]
 	 if !ok {
-	 	users[userid] = userid
+	 	users[userid]=Usersocket{userid,ws}
 	 }
+	 fmt.Println("用户加入聊天，用户id",users)
 	 return
 }
 /**
@@ -91,5 +134,6 @@ func CheckUserisLogin(touserid string,ws  *websocket.Conn){
 }
 //用户断开
 func Leave(userid string){
+	fmt.Println("用户离开聊天，用户id",users)
 	delete(users, userid)
 }

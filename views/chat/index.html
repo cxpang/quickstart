@@ -82,6 +82,7 @@
         socket = new WebSocket('ws://' + window.location.host + '/ws/join?UserId=' + userid + '&ToUserId='+touserid);
         socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
+            console.log(data)
             switch (data.Status){
                 case 3:
                     alert("私聊对象暂时不在线");
@@ -128,7 +129,8 @@
         var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
         return now;
     }
-    
+
+
 
 
 
