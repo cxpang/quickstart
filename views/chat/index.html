@@ -78,6 +78,7 @@
     var socket;
     var userid="{{.CurrentId}}";
     var touserid = "{{.toUser.Id}}";
+    var Tousername = "{{.toUser.Username}}";
     window.onload =function () {
         socket = new WebSocket('ws://' + window.location.host + '/ws/join?UserId=' + userid + '&ToUserId='+touserid);
         socket.onmessage = function (event) {
@@ -86,6 +87,19 @@
             switch (data.Status){
                 case 3:
                     alert("私聊对象暂时不在线");
+                    break;
+                case 1:
+                    var now=gettime();
+                    var i="<li class='even'> <a class='user' href='#'>";
+                    i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.toUser.User_picture}}' alt=''>";
+                    i+="<span class='user-name'>"+Tousername+"</span></a>";
+                    i+="<div class='reply-content-box'>";
+                    i+=" <span class='reply-time'>"+now+"</span>";
+                    i+="<div class='reply-content pr'>";
+                    i+="<span class='arrow'>&nbsp;</span>";
+                    i+=data.Data;
+                    i+="</div></div></li>";
+                    $("#chat-content").append(i);
                     break;
             }
         };

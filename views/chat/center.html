@@ -6,14 +6,14 @@
 
           {{range $val:=.FromDatas}}
 
-            <div id="chat-div{{$val.Fromid}}" class="col-md-12 yincang" style="border: 1px solid #ccc;overflow: auto;height: 550px">
+            <div id="chat-div{{$val.Toid}}" class="col-md-12 yincang" style="border: 1px solid #ccc;overflow: auto;height: 550px">
 
-                <ul id="chat-content{{$val.Fromid}}>" class="content-reply-box mg10">
+                <ul id="chat-content{{$val.Toid}}>" class="content-reply-box mg10">
 
                     <li class="even">
-                        <a class="user" href="#"><img class="img-responsive avatar_" src="http://cxpang.com{{GetUserPicture $val.Fromid}}" alt=""><span class="user-name">{{GetUserName $val.Fromid}}</span></a>
+                        <a class="user" href="#"><img class="img-responsive avatar_" src="http://cxpang.com{{GetUserPicture $val.Toid}}" alt=""><span class="user-name">{{GetUserName $val.Toid}}</span></a>
                         <div class="reply-content-box">
-                            <span class="reply-time">{{$val.UpdatedAt}}</span>
+                            <span class="reply-time">{{FormateTimeFromInt64 $val.UpdatedAt}}</span>
                             <div class="reply-content pr">
                                 <span class="arrow">&nbsp;</span>
                             {{$val.Message}}
@@ -31,12 +31,12 @@
 
 {{range $val:=.ToDatas}}
 
-    <div id="chat-div{{$val.Toid}}" class="col-md-12 yincang" style="border: 1px solid #ccc;overflow: auto;height: 550px">
-                <ul id="chat-content{{$val.Toid}}" class="content-reply-box mg10">
+    <div id="chat-div{{$val.Fromid}}" class="col-md-12 yincang" style="border: 1px solid #ccc;overflow: auto;height: 550px">
+                <ul id="chat-content{{$val.Fromid}}" class="content-reply-box mg10">
                     <li class="odd">
-                        <a class="user" href="#"><img class="img-responsive avatar_" src="http://cxpang.com{{GetUserPicture $val.Toid}}" alt=""><span class="user-name">{{GetUserName $val.Toid}}</span></a>
+                        <a class="user" href="#"><img class="img-responsive avatar_" src="http://cxpang.com{{GetUserPicture $val.Fromid}}" alt=""><span class="user-name">{{GetUserName $val.Fromid}}</span></a>
                         <div class="reply-content-box">
-                            <span class="reply-time">http://cxpang.com{{$val.UpdatedAt}}</span>
+                            <span class="reply-time">{{FormateTimeFromInt64 $val.UpdatedAt}}</span>
                             <div class="reply-content pr">
                                 <span class="arrow">&nbsp;</span>
                             {{$val.Message}}
@@ -196,6 +196,7 @@
     // }
 
     function changechat(chatid,user_id,username,user_picture) {
+
         var content="正在与"+username+"在线聊天中";
         $("#chat-tips").html(content);
         $("#chat-div-main").children('div').addClass('yincang');
@@ -204,53 +205,37 @@
         to_user_name=username;
         to_user_picture=user_picture;
         to_chat_id=chatid;
-
         chating();
 
     }
     //聊天辅助函数
     function chating() {
         var userid="{{.CurrentId}}";
-        socket = new WebSocket("ws://120.24.97.50:8484");
+        socket = new WebSocket('ws://' + window.location.host + '/ws/join?UserId=' + userid + '&ToUserId='+to_user_id);
         socket.onopen = function() {
             socket.send('login:' + userid);
         };
-        socket.onmessage=function (e) {
-            var getMsg = e.data;
-            if(/^notice:success$/.test(getMsg)) { //服务器验证通过
-                isLogin = true;
-            }
-            else if(/^msg:/.test(getMsg)) { //代表是普通消息
-                console.log(getMsg);
-                var now=gettime();
-                var i="<li class='even'> <a class='user' href='#'>";
-                i+=" <img class='img-responsive avatar_' src='"+to_user_picture+"' alt=''>";
-                i+="<span class='user-name'>"+to_user_name+"</span></a>";
-                i+="<div class='reply-content-box'>";
-                i+=" <span class='reply-time'>"+now+"</span>";
-                i+="<div class='reply-content pr'>";
-                i+="<span class='arrow'>&nbsp;</span>";
-                i+=getMsg.replace('msg:','');
-                i+="</div></div></li>";
+        socket.onmessage=function (event) {
+            var data = JSON.parse(event.data);
+            console.log(data);
+            switch (data.Status) {
+                case 3:
+                    alert("私聊对象暂时不在线");
+                    break;
+                case 1:
+                    var now = gettime();
+                    var i = "<li class='even'> <a class='user' href='#'>";
+                    i += " <img class='img-responsive avatar_' src='http://cxpang.com/" + to_user_picture + "' alt=''>";
+                    i += "<span class='user-name'>" + to_user_name + "</span></a>";
+                    i += "<div class='reply-content-box'>";
+                    i += " <span class='reply-time'>" + now + "</span>";
+                    i += "<div class='reply-content pr'>";
+                    i += "<span class='arrow'>&nbsp;</span>";
+                    i += data.Data;
+                    i += "</div></div></li>";
 
-
-                $("#chat-content"+to_user_id).append(i);
-            }
-            else if(/^users:/.test(getMsg)){ //显示当前已登录用户
-
-
-
-                getMsg = getMsg.replace('users:','');
-                getMsg= eval('('+getMsg+')'); //转json
-                // findkey(getMsg);
-                touser=null;
-                $.each(getMsg, function(key, val) {
-                    if(val==to_user_id){
-                        touser= key;
-                    }
-
-                });
-
+                    $("#chat-content" + to_user_id).append(i);
+                    break;
             }
 
         }
@@ -266,33 +251,12 @@
             alert("发送消息不能为空");
             $("#input-message").focus();
         }
-        else if(!touser){
-            //    保存离线消息到数据库中
-            var formdata=new FormData();
-            formdata.append('to_chat_id',to_chat_id);
-            formdata.append('message',message);
-            $.ajax(
-                    {
-                        url:'',
-                    type:'POST',
-                    cache:false,
-                    data:formdata,
-
-                    processData:false,
-                    contentType:false,
-                    success:function (data) {
-                alert("用户离线，我们将在用户上线时通知用户");
-                $("#input-message").val("");
-            }
-        }
-        )
-        }
-        else{
-            socket.send('chat:<'+touser+'>:'+message);
+        else {
+            // socket.send(message);
             var now=gettime();
             var i="<li class='odd'> <a class='user' href='#'>";
-            i+=" <img class='img-responsive avatar_' src='#' alt=''>";
-            i+="<span class='user-name'></span></a>";
+            i+=" <img class='img-responsive avatar_' src='http://cxpang.com{{.User_picture}}' alt=''>";
+            i+="<span class='user-name'>{{.User_name}}</span></a>";
             i+="<div class='reply-content-box'>";
             i+=" <span class='reply-time'>"+now+"</span>";
             i+="<div class='reply-content pr'>";
